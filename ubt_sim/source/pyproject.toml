@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools", "wheel", "toml"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ubt_sim"
+version = "0.1.0"
+description = "UBT Sim: UBTECH robot simulation platform based on Isaac Lab"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+keywords = ["simulation", "isaaclab", "ubtech", "tiangong"]
+classifiers = [
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3.11",
+    "Isaac Sim :: 5.1.0",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "deepdiff",
+    "pyyaml>=6.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/UBTECH-IL-LAB/ubt_sim"
+
+[tool.setuptools]
+packages = {find = {where = ["."]}}
+
+[tool.setuptools.package-dir]
+"" = "."
+
+[project.optional-dependencies]
+isaaclab = ["isaaclab[isaacsim,all]==2.3.0"]

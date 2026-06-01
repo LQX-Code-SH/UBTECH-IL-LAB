@@ -1,0 +1,19 @@
+image: 10.0.3.108:5000/ubuntu22_ros2_humble:v0.2
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - cd /home/ubuntu/devops && bash release.sh \
+         --workdir=${CI_PROJECT_DIR} \
+         --ros_version=humble \
+         --deploy_dir=/home/ubuntu/ros2ws \
+         --product=bodyctrl_msgs \
+         --platform=linux-x86 \
+         --specs=humble-general \
+         --enable_upload=1 \
+         --project_id=468  \
+         --version=${CI_COMMIT_TAG}
+
