@@ -1,7 +1,7 @@
 FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV ROS_DOMAIN_ID=146
+ENV ROS_DOMAIN_ID=0
 
 # 先安装 ca-certificates，再替换 apt 为清华源
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \

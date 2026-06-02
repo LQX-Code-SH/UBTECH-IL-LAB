@@ -7,18 +7,25 @@ from std_msgs.msg import Bool, Float32
 try:
     from bodyctrl_msgs.msg import MotorStatusMsg, MotorStatus, CmdSetMotorPosition, CmdMotorCtrl
 except ImportError:
-    print("[ERROR] bodyctrl_msgs not found. Please source the correct workspace.")
-    class MotorStatusMsg: pass
-    class MotorStatus: pass
-    class CmdSetMotorPosition: pass
-    class CmdMotorCtrl: pass
+    raise ImportError(
+        "bodyctrl_msgs not found. "
+        "source /opt/ros/humble/setup.bash && "
+        "colcon build --packages-select bodyctrl_msgs"
+    )
 
 import zmq
 import yaml
 import os
+import sys
 import subprocess
 import threading
 import time
+
+# 从 control/constants.py 导入共享常量（零依赖，纯数据）
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir, "control"))
+from constants import ID_TO_NAME as _ID_TO_NAME, NAME_TO_ID as _NAME_TO_ID
+from constants import HAND_L_MAP as _HAND_L_MAP, HAND_R_MAP as _HAND_R_MAP
+from constants import ID_HEAD, ID_ARM_L, ID_ARM_R, ID_WAIST, ID_LEG_L, ID_LEG_R
 
 
 def load_bridge_config():
@@ -62,50 +69,20 @@ class TiangongRosBridge(Node):
         self.status_socket.setsockopt(zmq.RCVHWM, 1)
         self.status_socket.setsockopt_string(zmq.SUBSCRIBE, "")
 
-        # ID Definition
-        self.ID_HEAD = [1, 2, 3]
-        self.ID_ARM_L = [11, 12, 13, 14, 15, 16, 17]
-        self.ID_ARM_R = [21, 22, 23, 24, 25, 26, 27]
-        self.ID_WAIST = [31]
-        self.ID_LEG_L = [51, 52, 53, 54, 55, 56]
-        self.ID_LEG_R = [61, 62, 63, 64, 65, 66]
+        # ID Definition — 从 constants.py 共享
+        self.ID_HEAD = ID_HEAD
+        self.ID_ARM_L = ID_ARM_L
+        self.ID_ARM_R = ID_ARM_R
+        self.ID_WAIST = ID_WAIST
+        self.ID_LEG_L = ID_LEG_L
+        self.ID_LEG_R = ID_LEG_R
 
-        # Reverse Mapping for Commands (ID to Name)
-        self.ID_TO_NAME = {
-            # Head
-            1: "head_roll_joint", 2: "head_pitch_joint", 3: "head_yaw_joint",
-            # Arms
-            11: "shoulder_pitch_l_joint", 12: "shoulder_roll_l_joint", 13: "shoulder_yaw_l_joint",
-            14: "elbow_pitch_l_joint", 15: "elbow_yaw_l_joint", 16: "wrist_pitch_l_joint", 17: "wrist_roll_l_joint",
-            21: "shoulder_pitch_r_joint", 22: "shoulder_roll_r_joint", 23: "shoulder_yaw_r_joint",
-            24: "elbow_pitch_r_joint", 25: "elbow_yaw_r_joint", 26: "wrist_pitch_r_joint", 27: "wrist_roll_r_joint",
-            # Waist
-            31: "body_yaw_joint",
-            # Legs
-            51: "hip_roll_l_joint", 52: "hip_pitch_l_joint", 53: "hip_yaw_l_joint",
-            54: "knee_pitch_l_joint", 55: "ankle_pitch_l_joint", 56: "ankle_roll_l_joint",
-            61: "hip_roll_r_joint", 62: "hip_pitch_r_joint", 63: "hip_yaw_r_joint",
-            64: "knee_pitch_r_joint", 65: "ankle_pitch_r_joint", 66: "ankle_roll_r_joint"
-        }
+        # Reverse Mapping for Commands (ID to Name) — 从 constants.py 共享
+        self.ID_TO_NAME = _ID_TO_NAME
+        self.NAME_TO_ID = _NAME_TO_ID
 
-        self.NAME_TO_ID = {v: k for k, v in self.ID_TO_NAME.items()}
-
-        self.HAND_L_MAP = {
-            1: "left_little_1_joint",
-            2: "left_ring_1_joint",
-            3: "left_middle_1_joint",
-            4: "left_index_1_joint",
-            5: "left_thumb_2_joint",
-            6: "left_thumb_1_joint"
-        }
-        self.HAND_R_MAP = {
-            1: "right_little_1_joint",
-            2: "right_ring_1_joint",
-            3: "right_middle_1_joint",
-            4: "right_index_1_joint",
-            5: "right_thumb_2_joint",
-            6: "right_thumb_1_joint"
-        }
+        self.HAND_L_MAP = _HAND_L_MAP
+        self.HAND_R_MAP = _HAND_R_MAP
 
         # --- Dynamic subscriptions from config ---
         SUB_CALLBACKS = {

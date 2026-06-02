@@ -7,5 +7,5 @@ PROJECT_DIR="$(cd "$(dirname "${SCRIPT_DIR}")/.." && pwd)"
 GPU_FLAGS=""
 NETWORK="--network host"
 MOUNTS="-v ${PROJECT_DIR}:/ubt_sim"
-ROS_DOMAIN_ID=146
+ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-146}"
 BRIDGE_SCRIPT="/ubt_sim/teleoperation/bridges/ros2_zmq_bridge.py"

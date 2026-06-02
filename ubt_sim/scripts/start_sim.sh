@@ -29,7 +29,7 @@ trap cleanup EXIT INT TERM
 if [ -z "$UBT_SIM_NO_BRIDGE" ]; then
     if [ -f /opt/ros/humble/setup.bash ]; then
         source /opt/ros/humble/setup.bash
-        export ROS_DOMAIN_ID=146
+        export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-146}"
         /usr/bin/python3 "$PROJECT_DIR/teleoperation/bridges/ros2_zmq_bridge.py" &
         BRIDGE_PID=$!
         echo "[INFO] ROS2-ZMQ bridge started (PID=$BRIDGE_PID)"

@@ -1075,3 +1075,6 @@ ubt_sim/shell/isaac-sim/ov/texturecache/tl2leafjw_4K_Roughness_101_1_0_178029966
 ubt_sim/shell/isaac-sim/ov/texturecache/tl2leafjw_4K_Roughness_101_1_0_1780299665_6851151_6.ovtex.3
 ubt_sim/shell/isaac-sim/ov/texturecache/tl2leafjw_4K_Roughness_101_1_0_1780299665_6851151_6.ovtex.4
 ubt_sim/shell/isaac-sim/ov/texturecache/tl2leafjw_4K_Roughness_101_1_0_1780299665_6851151_6.ovtex.desc
+ubt_sim/ubt_sim.zip
+ubt_sim/dataset/*
+ubt_sim/dataset/
