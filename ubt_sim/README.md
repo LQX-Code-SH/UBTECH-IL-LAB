@@ -4,6 +4,17 @@ UBTECH 天工 Pro 机器人仿真平台，基于 NVIDIA Isaac Lab 2.2.0。
 
 支持遥操作仿真、数据采集（HDF5/LeRobot 格式）、轨迹回放。
 
+## ⚠️ Git LFS 注意事项
+
+本项目使用 Git LFS 管理 3D 模型等大文件（`*.usd`、`*.urdf`、`*.exr`、`*.png`）。未安装 Git LFS 或下载不完整时，这些文件仅为指针文件，仿真无法启动。
+
+```bash
+git lfs install                          # 安装 LFS（仅需一次）
+git clone <仓库地址>                      # 克隆（LFS 文件自动下载）
+git lfs pull                             # 补全未下载的 LFS 文件
+GIT_LFS_SKIP_SMUDGE=1 git clone <仓库地址>  # 仅克隆代码，跳过 LFS
+```
+
 ## 架构
 
 单容器架构，ROS2 Humble 与 Isaac Sim 共存：
@@ -22,11 +33,13 @@ cd docker/isaac_sim
 bash run.sh build && bash run.sh start && bash run.sh init && bash run.sh check
 
 # 2. 启动仿真（自动启动 ROS2-ZMQ 桥接）
-bash docker/isaac_sim/run.sh bash
-cd /ubt_sim && bash scripts/start_sim.sh
+bash run.sh bash
+bash scripts/start_sim.sh 
 # 跳过桥接：UBT_SIM_NO_BRIDGE=1 bash scripts/start_sim.sh
+# 按R机器人可复位
 
 # 3. 数据采集（同一容器内，用系统 Python 3.10）
+/usr/bin/python3 /ubt_sim/teleoperation/control/reset.py  # 机器人回零
 /usr/bin/python3 /ubt_sim/teleoperation/control/pick_place_save_data.py  # 单次
 bash /ubt_sim/teleoperation/control/save_data.sh                         # 批量
 ```
