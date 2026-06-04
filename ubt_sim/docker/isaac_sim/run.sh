@@ -55,6 +55,7 @@ case "${1:-}" in
                 -e "DISPLAY=${DISPLAY}" \
                 -e "ACCEPT_EULA=Y" \
                 -e "PRIVACY_CONSENT=Y" \
+                -e "FASTRTPS_DEFAULT_PROFILES_FILE=$FASTRTPS_DEFAULT_PROFILES_FILE" \
                 -w /ubt_sim \
                 --privileged \
                 "$IMAGE" tail -f /dev/null
@@ -108,6 +109,7 @@ case "${1:-}" in
         docker exec -it "$CONTAINER_NAME" bash -c "\
             source /opt/ros/humble/setup.bash 2>/dev/null || true; \
             export ROS_DOMAIN_ID=$ROS_DOMAIN_ID; \
+            export FASTRTPS_DEFAULT_PROFILES_FILE=$FASTRTPS_DEFAULT_PROFILES_FILE; \
             bash"
         ;;
     rm)
@@ -176,6 +178,7 @@ case "${1:-}" in
         docker exec -d "$CONTAINER_NAME" bash -c "\
             source /opt/ros/humble/setup.bash && \
             export ROS_DOMAIN_ID=$ROS_DOMAIN_ID && \
+            export FASTRTPS_DEFAULT_PROFILES_FILE=$FASTRTPS_DEFAULT_PROFILES_FILE && \
             /usr/bin/python3 $BRIDGE_SCRIPT"
         sleep 1
         BRIDGE_PID=$(docker exec "$CONTAINER_NAME" pgrep -f "ros2_zmq_bridge" 2>/dev/null || true)

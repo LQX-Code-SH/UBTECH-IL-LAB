@@ -194,6 +194,6 @@ if __name__ == "__main__":
 
     # example2
     # Initialize the client with performance evaluation enabled
-    client = ImageClient(image_show = True, tv_img_shape=(360, 640, 3), server_address='127.0.0.1', port=5558, Unit_Test=False) # local test
+    client = ImageClient(image_show = True, tv_img_shape=(360, 640, 3), server_address='127.0.0.1', port=5558, Unit_Test=True) # local test
     # client = ImageClient(image_show = True, server_address='192.168.41.2', Unit_Test=False) # deployment test
     client.receive_process()
