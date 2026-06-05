@@ -42,3 +42,19 @@ ubt_sim/shell/
 ubt_sim/ubt_sim.zip
 ubt_sim/dataset/*
 ubt_sim/dataset/
+
+ubt_IL/.cache/
+
+# ===== ubt_IL 忽略规则 =====
+ubt_IL/.gitignore
+
+# 真机数据集（仅保留 sim_pick_place 示例）
+ubt_IL/dataset/real_grasp_bottle/
+ubt_IL/dataset/real_merged/
+ubt_IL/dataset/real_pick_place/
+ubt_IL/dataset/dataset/
+
+# 模型权重与训练状态
+ubt_IL/model/
+
+# lerobot 已作为 submodule 管理，不需要忽略

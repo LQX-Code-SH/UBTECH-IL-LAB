@@ -1,0 +1,55 @@
+{
+    "observation.images.camera_top": {
+        "dtype": "video",
+        "shape": [360, 640, 3],
+        "names": ["height", "width", "channel"],
+        "video_info": {
+            "video.fps": 30.0,
+            "video.codec": "libx264",
+            "video.pix_fmt": "yuv420p",
+            "video.is_depth_map": false,
+            "has_audio": false
+        }
+    },
+    "observation.state": {
+        "dtype": "float64",
+        "shape": [16]
+    },
+    "action": {
+        "dtype": "float64",
+        "shape": [16]
+    },
+    "episode_index": {
+        "dtype": "int64",
+        "shape": [1],
+        "names": null
+    },
+    "frame_index": {
+        "dtype": "int64",
+        "shape": [1],
+        "names": null
+    },
+    "index": {
+        "dtype": "int64",
+        "shape": [1],
+        "names": null
+    },
+    "task_index": {
+        "dtype": "int64",
+        "shape": [1],
+        "names": null
+    },
+    "hdf5_mapping": {
+        "observation.state": [
+            "puppet/joint_position"
+        ],
+        "action": [
+            "master/joint_position"
+        ],
+        "observation.images.camera_top": {
+            "hdf5_key": "observations/rgb_images/camera_top",
+            "encoding": "jpeg",
+            "image_size": [640, 360]
+        }
+    }
+}

@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lerobot_robot_tienkung"
+version = "0.1.0"
+description = "TienKung dual-arm robot with Inspire dexterous hands plugin for LeRobot"
+requires-python = ">=3.12"
+dependencies = ["pyzmq"]
+
+[tool.setuptools.packages.find]
+include = ["lerobot_robot_tienkung*"]
