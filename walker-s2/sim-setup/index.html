@@ -1911,6 +1911,9 @@
 <h2 id="快速开始">快速开始<a class="headerlink" href="#快速开始" title="Permanent link">&para;</a></h2>
 <h3 id="1-构建环境宿主机">1. 构建环境（宿主机）<a class="headerlink" href="#1-构建环境宿主机" title="Permanent link">&para;</a></h3>
 <p>容器构建流程各机型一致，见 <a href="../../sim/docker/">仿真平台 · 容器构建与使用</a>（<code>build</code> / <code>start</code> / <code>init</code> / <code>check</code> / <code>bash</code>）。</p>
+<blockquote>
+<p>⚠️ <strong>构建镜像前必须修改</strong>：编辑 <code>ubt_sim/docker/fastdds_no_shm.xml</code> 的 <code>interfaceWhiteList</code>，将 <code>&lt;address&gt;</code> 改为 <code>192.168.11.99</code>（Walker S2 直连网段）。该文件构建时 COPY 进镜像，构建后再改无效。</p>
+</blockquote>
 <h3 id="2-启动仿真容器内">2. 启动仿真（容器内）<a class="headerlink" href="#2-启动仿真容器内" title="Permanent link">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>bash<span class="w"> </span>run.sh<span class="w"> </span>bash<span class="w">                       </span><span class="c1"># 进入容器（自动 source ROS2 + Walker SDK 环境）</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">UBT_SIM_TASK</span><span class="o">=</span>UBTSim-WalkerS2-PickPart-v0<span class="w"> </span>bash<span class="w"> </span>/ubt_sim/scripts/start_sim.sh<span class="w">   </span><span class="c1"># 启动仿真 + 自动拉起桥接</span>
