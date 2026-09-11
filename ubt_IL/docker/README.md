@@ -82,7 +82,11 @@ BASE_IMAGE=docker.io/dustynv/l4t-pytorch:r36.4.0 bash run.sh build
 
 2. **bodyctrl_msgs 两架构均可用，安装方式不同**。x86 用预编译 deb（`ros2_msgs/ros-humble-bodyctrl-msgs_0.0.1-1_amd64.deb`，含 x86_64 原生 type-support，`dpkg` 装入 `/opt/ros/humble`）；arm64 无对应 deb，改由 `Dockerfile.arm64` 构建时从 `ros2_msgs/bodyctrl_msgs_src` 源码 colcon 编译到 `/opt/bodyctrl_msgs_ws`，`entrypoint.sh` 与 `run.sh bash` 启动时 source。源码备份自 `ubt_sim/teleoperation/msgs/body_crtl_msgs_src`（包名 `bodyctrl_msgs`，与 deb 同名同版本）。Walker S2 EDU 探索者 不依赖 bodyctrl_msgs（其消息由 `entrypoint.sh` 从 `/ubt_IL/walker/walker_sdk_ros2` 源码编译 8 个包）。
 
-3. **FastDDS 必须禁用共享内存**。容器内即使 `--network=host`，共享内存传输仍会导致 `ros2 topic list` 可用但 `echo`/`subscribe` 失败。`fastdds_no_shm.xml` 白名单含 `127.0.0.1` 与 Walker S2 EDU 探索者 直连网段 `192.168.11.3`；改网段时需同步更新此文件。
+3. **FastDDS 必须禁用共享内存**。容器内即使 `--network=host`，共享内存传输仍会导致 `ros2 topic list` 可用但 `echo`/`subscribe` 失败。`fastdds_no_shm.xml` 白名单含 `127.0.0.1` 与机器人直连网段。⚠️ **该网段随机型而不同，构建镜像前必须修改此文件**：
+   - 天工 Tienkung Pro：`192.168.41.99`
+   - Walker S2：`192.168.11.99`
+
+   配错网段容器内收不到机器人话题。改网段时需同步更新此文件。
 
 4. **TORCH_HOME 已重定向**。基镜像默认 `TORCH_HOME=/data/models/torch`，容器内 `/data` 不存在且无权创建，已改到 bind mount 路径 `/ubt_IL/.cache/torch`，使 torchvision ResNet 等 pretrained 权重可下载并持久化。Dockerfile、`env.sh`、`entrypoint.sh` 三处协同设置。
 

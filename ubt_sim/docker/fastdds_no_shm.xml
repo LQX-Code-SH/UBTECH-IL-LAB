@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ██ ██  ⚠️  机型相关，构建镜像前必改  ⚠️  ██ ██
+  interfaceWhiteList 中第二个 <address> 是本机与机器人直连网卡的 IP，随机型切换：
+    - Walker S2:          192.168.11.99
+    - 天工 Tienkung Pro:  192.168.41.99
+  构建前必须改成目标机型的网段，否则容器内收不到机器人话题。
+  127.0.0.1 保留勿动。
+-->
 <profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
     <transport_descriptors>
         <transport_descriptor>
@@ -6,7 +14,7 @@
             <type>UDPv4</type>
             <interfaceWhiteList>
                 <address>127.0.0.1</address>
-                <!-- 网线直连真机的网卡 IP，按实际修改 -->
+                <!-- ⚠️ 随机型切换（见文件头注释）：当前 192.168.11.99 -->
                 <address>192.168.11.99</address>
             </interfaceWhiteList>
             <maxInitialPeersRange>10</maxInitialPeersRange>

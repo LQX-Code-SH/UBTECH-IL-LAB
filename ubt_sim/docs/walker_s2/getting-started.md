@@ -52,6 +52,10 @@ bash run.sh init       # 容器安装相关依赖,只需首次构建容器时执
 bash run.sh check      # 校验环境（GPU / ROS2 / 消息包 / numpy<2 等）
 ```
 
+> ⚠️ **启动容器前必须检查 `ubt_sim/docker/fastdds_no_shm.xml`**：白名单中的直连网段须为本机与机器人直连网卡的 IP，即 **`192.168.11.99`**（`127.0.0.1` 保留勿动）。
+>
+> 配错网段会导致容器内 `ros2 topic echo` 收不到机器人话题。该文件以 bind-mount 方式挂进容器（`/ubt_sim/docker/fastdds_no_shm.xml`），**无需重建镜像，改文件后重启容器即生效**。
+
 如需区分真机/仿真的 ROS2 域，用 `ROS_DOMAIN_ID` 启动容器（默认 0）：
 
 ```bash

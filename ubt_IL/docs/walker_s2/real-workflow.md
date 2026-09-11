@@ -39,6 +39,10 @@ bash run.sh start
 bash run.sh bash       # 进入容器，后续转换/训练/评估命令均在容器内执行
 ```
 
+> ⚠️ **`bash run.sh build` 前必须检查 `ubt_IL/docker/fastdds_no_shm.xml`**：白名单中的直连网段须为本机与机器人直连网卡的 IP，即 **`192.168.11.99`**（`127.0.0.1` 保留勿动）。
+>
+> 配错网段会导致容器内 `ros2 topic echo` 收不到机器人话题。该文件会被 COPY 进镜像（`/opt/fastdds_no_shm.xml`），**构建后改文件无效，必须先改再构建**。详见 [docker/README.md](../../docker/README.md) 注意事项第 3 条。
+
 > 容器内存在双 `python` 环境，ROS相关使用`/usr/bin/python3`，lerobot相关脚本使用 `/lerobot/.venv/bin/python`（默认）。
 > 真机部署时容器在 **机器人Jetson板** 上构建，构建脚本会自动识别当前主板类型构建相应的arm容器。
 
@@ -238,6 +242,8 @@ scp 项目代码和模型 /home/walker/
 # 1.2 进入vision板并构建容器
 ssh walker@192.168.11.3 # 登陆机器人Vision板,密码请向您的技术支持人员获取
 cd 项目路径/ubt_IL/docker
+# ⚠️ build 前检查 fastdds_no_shm.xml 白名单须为 192.168.11.99
+#    （构建后改文件无效，必须先改再构建）
 bash run.sh build
 # 1.3 启动容器
 bash run.sh start

@@ -249,9 +249,11 @@ HF_HUB_OFFLINE=1 /lerobot/.venv/bin/lerobot-train \
  - 机器人端启动 ImageServer 提供 JPEG 流。。
 
 ```bash
-# 0. 构建容器，检查网络配置：编辑 ubt_IL/docker/fastdds_no_shm.xml 的 interfaceWhiteList，
-# 可新增/修改 <address> 为本机 IP（如 192.168.41.99），保证与机器人在同一网段，随后重启容器，
-# 最后容器内 echo $FASTRTPS_DEFAULT_PROFILES_FILE, cat /opt/fastdds_no_shm.xml检查网络配置。
+# 0. ⚠️ 构建容器前必须检查网络配置：ubt_IL/docker/fastdds_no_shm.xml 的 interfaceWhiteList 中的
+#    直连网段须为本机与机器人直连网卡的 IP，即 192.168.41.99（127.0.0.1 保留勿动）。
+#    该文件会被 COPY 进镜像，构建后改文件无效，必须先改再构建！
+#    配错网段会导致容器内 ros2 topic echo 收不到机器人话题。
+# 0.1 构建后验证：容器内 echo $FASTRTPS_DEFAULT_PROFILES_FILE, cat /opt/fastdds_no_shm.xml 检查网络配置。
 
 cd ubt_IL/docker
 bash run.sh build
