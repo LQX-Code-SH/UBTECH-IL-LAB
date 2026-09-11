@@ -76,7 +76,7 @@ BASE_IMAGE=docker.io/dustynv/l4t-pytorch:r36.4.0 bash run.sh build
 
 1. **架构强绑定，不能单机并存双架构**。arm64 镜像并非通用 arm64，而是 Jetson 专用（基镜像面向 JetPack 6、torch wheel 为 Orin sm_87 源码编译、GPU 参数依赖 Jetson 版 `--runtime nvidia`）。x86 宿主机只能构建并运行 x86 容器；arm64 容器必须在 Jetson 上构建与运行。
 2. **bodyctrl_msgs 两架构均可用，安装方式不同**。x86 用预编译 deb（`dpkg` 装入 `/opt/ros/humble`）；arm64 无对应 deb，改由 `Dockerfile.arm64` 构建时从源码 colcon 编译到 `/opt/bodyctrl_msgs_ws`。Walker S2 EDU 探索者 不依赖 bodyctrl_msgs（其消息由 `entrypoint.sh` 从 `/ubt_IL/walker/walker_sdk_ros2` 源码编译 8 个包）。
-3. **FastDDS 必须禁用共享内存**。容器内即使 `--network=host`，共享内存传输仍会导致 `ros2 topic list` 可用但 `echo`/`subscribe` 失败。`fastdds_no_shm.xml` 白名单默认含 `127.0.0.1` 与天工行者 直连网段 `192.168.41.99`；真机部署改网段时需同步更新此文件（详见各机型真机全流程）。
+3. **FastDDS 必须禁用共享内存**。容器内即使 `--network=host`，共享内存传输仍会导致 `ros2 topic list` 可用但 `echo`/`subscribe` 失败。`fastdds_no_shm.xml` 白名单默认含 `127.0.0.1` 与机型直连网段：天工行者 `192.168.41.99`、Walker S2 `192.168.11.99`。⚠️ **该文件随机型直连网段切换，构建镜像前必须修改**（文件构建时 COPY 进镜像，构建后再改无效）；详见各机型真机全流程。
 4. **TORCH_HOME 已重定向**到 bind mount 路径 `/ubt_IL/.cache/torch`，使 torchvision ResNet 等 pretrained 权重可下载并持久化。
 5. **entrypoint 每次启动做运行时安装**。lerobot、`lerobot_robot_tienkung`、`lerobot_robot_walker` 均以 editable 安装，源码改完重启容器即生效。entrypoint 还会把 `opencv-python-headless` 换成 GUI 版并钉死 `numpy<2`；对 Jetson 防御性校验 `torch.cuda.get_arch_list()` 含 `8.7`。
 6. **Jetson torch wheel 随镜像分发**。通用 `download.pytorch.org` cu128 wheel 未编译 SM_87，会报 `no kernel image is available`；本目录 wheel 为本机源码编译（CUDA 12.6, cuDNN 9.4, cp312），COPY 进 `/opt/jetson-wheels` 避免每台 Jetson 重编。

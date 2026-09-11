@@ -15,6 +15,8 @@ bash run.sh check      # 校验环境（GPU / ROS2 / 消息包 / numpy<2 等）
 bash run.sh bash       # 进入容器 shell（自动 source ROS2 环境）
 ```
 
+> ⚠️ **机型相关，构建镜像前必须修改**：编辑 `ubt_sim/docker/fastdds_no_shm.xml` 的 `interfaceWhiteList`，将 `<address>` 改为对应机型直连网段：天工行者 `192.168.41.99`、Walker S2 `192.168.11.99`。该文件构建时 COPY 进镜像，构建后再改无效，务必先改再 build。
+
 如需区分真机/仿真的 ROS2 域，用 `ROS_DOMAIN_ID` 启动容器（默认 0）：
 
 ```bash

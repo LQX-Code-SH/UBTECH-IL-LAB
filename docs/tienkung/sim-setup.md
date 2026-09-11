@@ -12,6 +12,8 @@
 
 容器构建流程见 [仿真平台 · 容器构建与使用](../sim/docker.md)（`build` / `start` / `init` / `check` / `bash`）。
 
+> ⚠️ **构建镜像前必须修改**：编辑 `ubt_sim/docker/fastdds_no_shm.xml` 的 `interfaceWhiteList`，将 `<address>` 改为 `192.168.41.99`（天工行者直连网段）。该文件构建时 COPY 进镜像，构建后再改无效。
+
 ### 2. 启动仿真（容器内）
 
 ```bash

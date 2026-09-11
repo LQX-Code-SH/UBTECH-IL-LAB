@@ -45,6 +45,9 @@
 
 ```bash
 cd ubt_IL/docker
+
+# ⚠️ 构建镜像前必须检查：编辑 ubt_IL/docker/fastdds_no_shm.xml 的 interfaceWhiteList，
+# 将 <address> 修改为 192.168.41.99（天工行者直连网段）。该文件构建时 COPY 进镜像，构建后再改无效。
 bash run.sh build      # 首次
 bash run.sh start
 bash run.sh bash       # 进入容器，后续转换/训练/评估命令均在容器内执行
@@ -249,14 +252,19 @@ HF_HUB_OFFLINE=1 /lerobot/.venv/bin/lerobot-train \
  - 机器人端启动 ImageServer 提供 JPEG 流。。
 
 ```bash
-# 0. 构建容器，检查网络配置：编辑 ubt_IL/docker/fastdds_no_shm.xml 的 interfaceWhiteList，
-# 可新增/修改 <address> 为本机 IP（如 192.168.41.99），保证与机器人在同一网段，随后重启容器，
-# 最后容器内 echo $FASTRTPS_DEFAULT_PROFILES_FILE, cat /opt/fastdds_no_shm.xml检查网络配置。
+# 0. 构建容器
+# ⚠️ 机型相关，构建镜像前必须检查网络配置：编辑 ubt_IL/docker/fastdds_no_shm.xml 的 interfaceWhiteList，
+# 将 <address> 修改为 192.168.41.99（天工行者直连网段），保证与机器人在同一网段。
+# 该文件构建时 COPY 进镜像，构建后再修改无效，务必先改再 build。
 
 cd ubt_IL/docker
 bash run.sh build
 bash run.sh start
 bash run.sh bash
+
+# 0.1 构建后验证网络配置：容器内确认网段配置已生效
+echo $FASTRTPS_DEFAULT_PROFILES_FILE
+cat /opt/fastdds_no_shm.xml
 bash run.sh restart
 
 # 1. 机器人端启动相机服务（仅真机部署需要）

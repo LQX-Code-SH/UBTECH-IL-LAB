@@ -11,6 +11,8 @@ Walker S2 EDU 探索者 仿真基于 NVIDIA Isaac Sim（Isaac Lab 2.2.0）构建
 
 容器构建流程各机型一致，见 [仿真平台 · 容器构建与使用](../sim/docker.md)（`build` / `start` / `init` / `check` / `bash`）。
 
+> ⚠️ **构建镜像前必须修改**：编辑 `ubt_sim/docker/fastdds_no_shm.xml` 的 `interfaceWhiteList`，将 `<address>` 改为 `192.168.11.99`（Walker S2 直连网段）。该文件构建时 COPY 进镜像，构建后再改无效。
+
 
 ### 2. 启动仿真（容器内）
 

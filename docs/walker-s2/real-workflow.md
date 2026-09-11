@@ -34,6 +34,9 @@ A[真机遥操作采集] --> B[HDF5 数据转换] --> C[模型训练] --> D[离�
 
 ```bash
 cd ubt_IL/docker
+
+# ⚠️ 构建镜像前必须检查：编辑 ubt_IL/docker/fastdds_no_shm.xml 的 interfaceWhiteList，
+# 将 <address> 修改为 192.168.11.99（Walker S2 直连网段）。该文件构建时 COPY 进镜像，构建后再改无效。
 bash run.sh build      # 首次
 bash run.sh start
 bash run.sh bash       # 进入容器，后续转换/训练/评估命令均在容器内执行
@@ -238,6 +241,8 @@ scp 项目代码和模型 /home/walker/
 # 1.2 进入vision板并构建容器
 ssh walker@192.168.11.3 # 登陆机器人Vision板,密码aa
 cd 项目路径/ubt_IL/docker
+# ⚠️ 构建镜像前必须检查：编辑 fastdds_no_shm.xml 的 interfaceWhiteList，
+# 将 <address> 改为 192.168.11.99（Walker S2 直连网段）；构建时 COPY 进镜像，构建后再改无效。
 bash run.sh build
 # 1.3 启动容器
 bash run.sh start
